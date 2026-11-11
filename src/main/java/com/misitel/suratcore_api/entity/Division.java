@@ -31,3 +31,4 @@ public class Division {
     @Column(name = "nama_divisi", nullable = false)
     private String namaDivisi;
 }
+

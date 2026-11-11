@@ -251,6 +251,11 @@ Untuk membuktikan bahwa token JWT bekerja memproteksi endpoint:
 | 5 | Get Division by ID | `GET` | `/api/divisions/{id}` | **Ya** (Bearer) | Mengambil detail divisi |
 | 6 | Update Division | `PUT` | `/api/divisions/{id}` | **Ya** (Bearer) | Memperbarui data divisi |
 | 7 | Delete Division | `DELETE` | `/api/divisions/{id}` | **Ya** (Bearer) | Menghapus data divisi |
+| 8 | Create Registrasi Surat | `POST` | `/api/registrasi-surat` | **Ya** (Bearer) | Membuat registrasi surat baru |
+| 9 | Get All Registrasi Surat | `GET` | `/api/registrasi-surat` | **Ya** (Bearer) | Mengambil seluruh data surat |
+| 10 | Get Registrasi Surat by ID | `GET` | `/api/registrasi-surat/{id}` | **Ya** (Bearer) | Mengambil detail registrasi surat |
+| 11 | Update Registrasi Surat | `PUT` | `/api/registrasi-surat/{id}` | **Ya** (Bearer) | Memperbarui registrasi surat |
+| 12 | Delete Registrasi Surat | `DELETE` | `/api/registrasi-surat/{id}` | **Ya** (Bearer) | Menghapus registrasi surat |
 
 ---
 
@@ -262,3 +267,4 @@ Untuk membuktikan bahwa token JWT bekerja memproteksi endpoint:
   Pada Postman, Anda dapat menyetel tab **Authorization** pada root Collection ke `Bearer Token: {{token}}`, lalu pada tiap protected request cukup pilih `Inherit auth from parent` agar tidak perlu mengatur token satu per satu.
 - **Divisi ID Tidak Ditemukan saat Register**:
   Jika muncul pesan `Divisi dengan ID x tidak ditemukan`, pastikan ID divisi yang dimasukkan pada payload register sudah ada di tabel `divisions` di database.
+

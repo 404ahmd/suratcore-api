@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-		"name": "Suratcore API - Auth & Division",
-		"description": "Postman Collection untuk pengujian endpoint autentikasi (Register, Login) dan endpoint terproteksi JWT pada Suratcore API.",
+		"name": "Suratcore API - Auth, Division & Registrasi Surat",
+		"description": "Postman Collection untuk pengujian endpoint autentikasi (Register, Login), CRUD Division, dan CRUD Registrasi Surat berbasis JWT pada Suratcore API.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"variable": [
@@ -170,7 +170,7 @@
 			]
 		},
 		{
-			"name": "2. Protected Endpoints (Division)",
+			"name": "2. Division",
 			"item": [
 				{
 					"name": "Create Division",
@@ -240,34 +240,272 @@
 					"response": []
 				},
 				{
-					"name": "Get All Divisions - Without Token (Negative Test)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 401 Unauthorized\", function () {",
-									"    pm.response.to.have.status(401);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
+					"name": "Get Division by ID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/divisions",
+							"raw": "{{baseUrl}}/api/divisions/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
-								"divisions"
+								"divisions",
+								"1"
 							]
 						},
-						"description": "Pengujian request ke protected endpoint tanpa menyertakan JWT token (ekspektasi: 401 Unauthorized)."
+						"description": "Mengambil detail divisi berdasarkan ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Division",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"kode_divisi\": \"IT\",\n    \"nama_divisi\": \"IT & Infrastructure\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/divisions/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"divisions",
+								"1"
+							]
+						},
+						"description": "Mengubah data divisi berdasarkan ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Division",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/divisions/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"divisions",
+								"1"
+							]
+						},
+						"description": "Menghapus divisi berdasarkan ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Registrasi Surat",
+			"item": [
+				{
+					"name": "Create Registrasi Surat",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nomor_surat\": \"001/MISITEL/SRT/XI/2026\",\n    \"user_id\": 1,\n    \"divisi_id\": 1,\n    \"keterangan\": \"Surat Permohonan Akses Server\",\n    \"tanggal\": \"2026-11-11\",\n    \"status\": \"DIPROSES\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/registrasi-surat",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"registrasi-surat"
+							]
+						},
+						"description": "Membuat registrasi surat baru."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Registrasi Surat",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/registrasi-surat",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"registrasi-surat"
+							]
+						},
+						"description": "Mengambil seluruh data registrasi surat."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Registrasi Surat by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/registrasi-surat/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"registrasi-surat",
+								"1"
+							]
+						},
+						"description": "Mengambil detail registrasi surat berdasarkan ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Registrasi Surat",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nomor_surat\": \"001/MISITEL/SRT/XI/2026\",\n    \"user_id\": 1,\n    \"divisi_id\": 1,\n    \"keterangan\": \"Surat Permohonan Akses Server (Disetujui)\",\n    \"tanggal\": \"2026-11-11\",\n    \"status\": \"SELESAI\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/registrasi-surat/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"registrasi-surat",
+								"1"
+							]
+						},
+						"description": "Memperbarui data registrasi surat berdasarkan ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Registrasi Surat",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/registrasi-surat/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"registrasi-surat",
+								"1"
+							]
+						},
+						"description": "Menghapus data registrasi surat berdasarkan ID."
 					},
 					"response": []
 				}

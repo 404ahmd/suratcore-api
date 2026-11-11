@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface DivisionRepository extends JpaRepository<Division, Long> {
 
     Optional<Division> findByKodeDivisi(String kodeDivisi);
+
+    boolean existsByKodeDivisi(String kodeDivisi);
 }
+

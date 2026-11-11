@@ -30,3 +30,4 @@ public class RegisterRequest {
     @NotBlank(message = "Role wajib diisi")
     private String role;
 }
+

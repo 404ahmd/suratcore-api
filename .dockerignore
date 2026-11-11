@@ -1,0 +1,15 @@
+.git
+.gitignore
+.gitattributes
+.vscode
+target
+!target/*.jar
+*.md
+postman_collection.json
+.mvn
+mvnw
+mvnw.cmd
+Dockerfile*
+docker-compose*.yml
+.env*
+

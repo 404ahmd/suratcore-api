@@ -108,3 +108,4 @@ public class RegistrasiSuratService {
         registrasiSuratRepository.delete(registrasiSurat);
     }
 }
+

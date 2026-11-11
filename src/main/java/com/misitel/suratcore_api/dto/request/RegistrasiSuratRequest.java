@@ -40,3 +40,4 @@ public class RegistrasiSuratRequest {
     @NotBlank(message = "Status wajib diisi")
     private String status;
 }
+

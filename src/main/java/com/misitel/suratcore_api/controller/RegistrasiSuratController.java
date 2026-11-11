@@ -68,3 +68,4 @@ public class RegistrasiSuratController {
         return ResponseEntity.ok(response);
     }
 }
+

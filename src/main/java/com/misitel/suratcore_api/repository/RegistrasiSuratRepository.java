@@ -20,3 +20,4 @@ public interface RegistrasiSuratRepository extends JpaRepository<RegistrasiSurat
 
     List<RegistrasiSurat> findByStatus(String status);
 }
+

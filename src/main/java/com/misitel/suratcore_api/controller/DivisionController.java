@@ -62,3 +62,4 @@ public class DivisionController {
         return ResponseEntity.ok(response);
     }
 }
+

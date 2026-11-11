@@ -1,0 +1,277 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Suratcore API - Auth & Division",
+		"description": "Postman Collection untuk pengujian endpoint autentikasi (Register, Login) dan endpoint terproteksi JWT pada Suratcore API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.test(\"Token is present and non-empty\", function () {",
+									"    pm.expect(jsonData.token).to.be.a('string').and.not.empty;",
+									"});",
+									"",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"    console.log(\"Saved JWT token to collection variable: token\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Muhamad Ibrahim Fajri\",\n    \"divisiId\": 1,\n    \"username\": \"fajri\",\n    \"password\": \"password123\",\n    \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Mendaftarkan user baru. Token JWT yang dikembalikan otomatis disimpan ke variabel `token`."
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.test(\"Token is returned\", function () {",
+									"    pm.expect(jsonData.token).to.be.a('string').and.not.empty;",
+									"});",
+									"",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"    console.log(\"Updated JWT token in collection variable: token\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"fajri\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login dengan username dan password yang sudah terdaftar. Token otomatis tersimpan ke variabel `token`."
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Invalid Credentials (Negative Test)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 or 403\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"fajri\",\n    \"password\": \"wrongpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Pengujian login dengan password salah untuk memverifikasi proteksi autentikasi."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Protected Endpoints (Division)",
+			"item": [
+				{
+					"name": "Create Division",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"kode_divisi\": \"IT\",\n    \"nama_divisi\": \"Information Technology\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/divisions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"divisions"
+							]
+						},
+						"description": "Menambahkan divisi baru menggunakan Bearer token hasil login."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Divisions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/divisions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"divisions"
+							]
+						},
+						"description": "Mengambil seluruh divisi dengan header Authorization Bearer token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Divisions - Without Token (Negative Test)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/divisions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"divisions"
+							]
+						},
+						"description": "Pengujian request ke protected endpoint tanpa menyertakan JWT token (ekspektasi: 401 Unauthorized)."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

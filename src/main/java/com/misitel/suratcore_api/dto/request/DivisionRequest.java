@@ -23,3 +23,4 @@ public class DivisionRequest {
     @JsonAlias({"nama_divisi", "namaDivisi"})
     private String namaDivisi;
 }
+
